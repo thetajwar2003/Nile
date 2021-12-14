@@ -1,8 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { MenuIcon, SearchIcon, ShoppingCartIcon } from "@heroicons/react/outline";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Header() {
+    const { data: session, status } = useSession();
     return (
         <header>
             {/* top header */}
@@ -25,8 +27,8 @@ export default function Header() {
 
                 {/* cart and profile */}
                 <div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
-                    <div className='link'>
-                        <p>Hello User</p>
+                    <div onClick={!session ? signIn : signOut} className='link'>
+                        {session ? `Hello, ${ session.user.name }` : "Sign In"}
                         <p className='font-extrabold md:text-sm'>Account & Lists</p>
                     </div>
                     <div className='link'>
@@ -36,7 +38,7 @@ export default function Header() {
                     <div className='relative link flex items-center'>
                         <span className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-500 text-center rounded-full text-black font-bold'>0</span>
                         <ShoppingCartIcon className='h-10' />
-                        <p className='hidden md:inline font-extrabold md:text-sm mt-2'>Basket</p>
+                        <p className='hidden md:inline font-extrabold md:text-sm mt-2'>Cart</p>
                     </div>
                 </div>
             </div>
