@@ -2,9 +2,18 @@ import React from 'react';
 import Image from 'next/image';
 import { StarIcon } from '@heroicons/react/solid';
 import Currency from 'react-currency-formatter';
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../slices/cartSlice";
 
-export default function Product({ id, title, price, description, category, image, rating }) {
+export default function Product({ id, title, price, description, category, image, rating, quantity }) {
     const hasSupreme = Math.random() < 0.5;
+    const dispatch = useDispatch();
+    const addItemToCart = () => {
+        const product = { id, title, price, description, category, image, rating, hasSupreme, quantity };
+
+        // sending the product as an action to the Redux store -> the cart slice
+        dispatch(addToCart(product));
+    };
     return (
         <div className='relative flex flex-col m-5 bg-white z-30 p-10'>
             <Image src={image} height={200} width={200} objectFit='contain' />
@@ -29,7 +38,7 @@ export default function Product({ id, title, price, description, category, image
                     <p className='text-xs text-gray-500'>Free Next-Day Delivery</p>
                 </div>
             )}
-            <button className='mt-auto button'>Add to Cart</button>
+            <button onClick={addItemToCart} className='mt-auto button'>Add to Cart</button>
         </div>
     );
 }

@@ -2,15 +2,21 @@ import React from 'react';
 import Image from 'next/image';
 import { MenuIcon, SearchIcon, ShoppingCartIcon } from "@heroicons/react/outline";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import { selectItems } from '../slices/cartSlice';
 
 export default function Header() {
     const { data: session, status } = useSession();
+    const items = useSelector(selectItems);
+    const router = useRouter();
     return (
         <header>
             {/* top header */}
             <div className="flex items-center bg-nile_blue p-1 flex-grow py-2">
                 <div className="mt-2 px-2 flex items-center flex-grow sm:flex-grow-0">
                     <Image
+                        onClick={() => router.push('/')}
                         src="https://drive.google.com/uc?export=view&id=1oMSSRbqtScoVJwGztfiLoUUV26bP1Bo6"
                         width={95} // 265
                         height={50} // 140
@@ -35,8 +41,10 @@ export default function Header() {
                         <p>Return</p>
                         <p className='font-extrabold md:text-sm'>& Orders</p>
                     </div>
-                    <div className='relative link flex items-center'>
-                        <span className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-500 text-center rounded-full text-black font-bold'>0</span>
+                    <div className='relative link flex items-center' onClick={() => router.push('/checkout')}>
+                        <span className='absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-500 text-center rounded-full text-black font-bold'>
+                            {items.length}
+                        </span>
                         <ShoppingCartIcon className='h-10' />
                         <p className='hidden md:inline font-extrabold md:text-sm mt-2'>Cart</p>
                     </div>
